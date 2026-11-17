@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, SectionList, TouchableOpacity, Image } from 'react-native';
+import { StyleSheet, Text, View, SectionList, TouchableOpacity, Image, Button } from 'react-native';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 
 // Card images come from the Pokemon TCG "151" gallery:
@@ -94,10 +94,9 @@ export default function App() {
         <MaterialCommunityIcons name="pokeball" size={30} color="#E3350D" />
         <Text style={styles.title}>Pokemon Cards</Text>
       </View>
-      <TouchableOpacity style={styles.addButton}>
-        <MaterialCommunityIcons name="plus" size={22} color="white" />
-        <Text style={styles.addButtonText}>Add Pokemon</Text>
-      </TouchableOpacity>
+      <View style={styles.addButton}>
+        <Button title="Add Pokemon" color="#E3350D" onPress={() => {}} />
+      </View>
       <SectionList
         sections={datasource}
         renderItem={renderItem}
@@ -128,20 +127,8 @@ const styles = StyleSheet.create({
     marginLeft: 8,
   },
   addButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: '#E3350D',
     marginHorizontal: 12,
     marginBottom: 6,
-    paddingVertical: 12,
-    borderRadius: 10,
-  },
-  addButtonText: {
-    color: 'white',
-    fontSize: 17,
-    fontWeight: 'bold',
-    marginLeft: 6,
   },
   list: {
     paddingHorizontal: 12,
