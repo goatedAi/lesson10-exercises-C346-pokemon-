@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, SectionList, TouchableOpacity, Image, Button, Alert } from 'react-native';
+import { StyleSheet, Text, View, SectionList, TouchableOpacity, Image } from 'react-native';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 
 // Card images come from the Pokemon TCG "151" gallery:
@@ -64,18 +64,24 @@ const datasource = [
 const renderItem = ({ item, section }) => {
   return (
     <TouchableOpacity
-      style={[styles.item, { backgroundColor: section.itemcolor, borderColor: section.bgcolor }]}>
-      <Text style={[styles.itemText, { color: section.textcolor }]}>{item.key}</Text>
+      style={[styles.item, { backgroundColor: section.itemcolor, borderLeftColor: section.bgcolor }]}>
+      <View>
+        <Text style={[styles.itemText, { color: section.textcolor }]}>{item.key}</Text>
+        <Text style={[styles.itemSubText, { color: section.textcolor }]}>
+          Card #{String(item.cardNumber).padStart(3, '0')}
+        </Text>
+      </View>
       <Image source={{ uri: cardImage(item.cardNumber) }} style={styles.cardImage} />
     </TouchableOpacity>
   );
 };
 
-const renderSectionHeader = ({ section: { title, icon, bgcolor } }) => {
+const renderSectionHeader = ({ section: { title, icon, bgcolor, data } }) => {
   return (
     <View style={[styles.header, { backgroundColor: bgcolor }]}>
-      <MaterialCommunityIcons name={icon} size={28} color="white" />
+      <MaterialCommunityIcons name={icon} size={26} color="white" />
       <Text style={styles.headerText}>{title}</Text>
+      <Text style={styles.headerCount}>{data.length} cards</Text>
     </View>
   );
 };
@@ -84,14 +90,20 @@ export default function App() {
   return (
     <View style={styles.container}>
       <StatusBar style="auto" />
-      <View style={styles.buttonContainer}>
-        <Button title="Add Pokemon"/>
+      <View style={styles.titleRow}>
+        <MaterialCommunityIcons name="pokeball" size={30} color="#E3350D" />
+        <Text style={styles.title}>Pokemon Cards</Text>
       </View>
+      <TouchableOpacity style={styles.addButton}>
+        <MaterialCommunityIcons name="plus" size={22} color="white" />
+        <Text style={styles.addButtonText}>Add Pokemon</Text>
+      </TouchableOpacity>
       <SectionList
         sections={datasource}
         renderItem={renderItem}
         renderSectionHeader={renderSectionHeader}
         contentContainerStyle={styles.list}
+        stickySectionHeadersEnabled={false}
       />
     </View>
   );
@@ -100,47 +112,86 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: '#F2F2F7',
     paddingTop: 50,
   },
-  buttonContainer: {
-    marginHorizontal: 10,
-    marginBottom: 10,
+  titleRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginHorizontal: 12,
+    marginBottom: 12,
+  },
+  title: {
+    fontSize: 28,
+    fontWeight: 'bold',
+    color: '#222',
+    marginLeft: 8,
+  },
+  addButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#E3350D',
+    marginHorizontal: 12,
+    marginBottom: 6,
+    paddingVertical: 12,
+    borderRadius: 10,
+  },
+  addButtonText: {
+    color: 'white',
+    fontSize: 17,
+    fontWeight: 'bold',
+    marginLeft: 6,
   },
   list: {
-    paddingHorizontal: 10,
-    paddingBottom: 20,
+    paddingHorizontal: 12,
+    paddingBottom: 30,
   },
   header: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'center',
     paddingVertical: 10,
-    marginTop: 10,
-    borderRadius: 8,
+    paddingHorizontal: 14,
+    marginTop: 16,
+    borderRadius: 10,
   },
   headerText: {
+    flex: 1,
     fontSize: 22,
     fontWeight: 'bold',
     color: 'white',
     marginLeft: 8,
   },
+  headerCount: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: 'white',
+  },
   item: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    borderWidth: 1,
-    borderRadius: 8,
+    borderLeftWidth: 6,
+    borderRadius: 10,
     marginTop: 8,
-    padding: 10,
+    paddingVertical: 10,
+    paddingLeft: 14,
+    paddingRight: 10,
+    boxShadow: '0 2px 6px rgba(0, 0, 0, 0.12)',
   },
   itemText: {
     fontSize: 20,
     fontWeight: 'bold',
     textAlign: 'left',
   },
+  itemSubText: {
+    fontSize: 14,
+    marginTop: 4,
+    opacity: 0.7,
+  },
   cardImage: {
-    width: 120,
-    height: 167,
+    width: 100,
+    height: 140,
+    borderRadius: 6,
   },
 });
